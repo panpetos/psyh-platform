@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsychPlatform - Онлайн платформа психологической помощи</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#4A90E2',
+                        'secondary': '#7FB069', 
+                        'accent': '#9B59B6',
+                        'muted': '#E8EDF3',
+                        'text': '#2C3E50'
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="font-inter bg-gray-50">
+    <!-- Navigation -->
+    <!-- @COMPONENT: Navigation [userRole, isAuthenticated] -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-primary">PsychPlatform</h1>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4">
+                            <a href="#" class="text-text hover:text-primary px-3 py-2 text-sm font-medium" data-nav="home">Главная</a>
+                            <a href="#" class="text-text hover:text-primary px-3 py-2 text-sm font-medium" data-nav="psychologists">Специалисты</a>
+                            <a href="#" class="text-text hover:text-primary px-3 py-2 text-sm font-medium" data-nav="how-it-works">Как это работает</a>
+                            <a href="#" class="text-text hover:text-primary px-3 py-2 text-sm font-medium" data-nav="about">О нас</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <button class="text-text hover:text-primary px-3 py-2 text-sm font-medium" data-action="login">Войти</button>
+                    <button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-600 transition" data-action="register">Регистрация</button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-500 hover:text-gray-600" data-mobile-menu="toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navigation -->
+
+    <!-- Main Content Container -->
+    <div id="app-container">
+        <!-- Landing Page -->
+        <div id="landing-page" class="page active">
+            <!-- Hero Section -->
+            <!-- @COMPONENT: HeroSection -->
+            <section class="bg-gradient-to-r from-blue-50 to-green-50 py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h1 class="text-4xl lg:text-6xl font-bold text-text mb-6">
+                                Найдите своего <span class="text-primary">психолога</span> онлайн
+                            </h1>
+                            <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                                Профессиональная психологическая помощь от квалифицированных специалистов. Безопасно, удобно, конфиденциально.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button class="bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-600 transition" data-action="find-psychologist">
+                                    Найти специалиста
+                                </button>
+                                <button class="border-2 border-secondary text-secondary px-8 py-4 rounded-xl font-semibold hover:bg-secondary hover:text-white transition" data-action="become-psychologist">
+                                    Стать психологом
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <!-- A peaceful therapy session with a comfortable modern office setting -->
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" alt="Professional therapy session" class="rounded-2xl shadow-2xl w-full h-auto" />
+                            <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg">
+                                <div class="flex items-center space-x-4">
+                                    <div class="bg-secondary text-white p-3 rounded-full">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-text">100% Конфиденциально</p>
+                                        <p class="text-sm text-gray-600">Защищенные сессии</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: HeroSection -->
+
+            <!-- Features Section -->
+            <!-- @COMPONENT: FeaturesSection -->
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl lg:text-4xl font-bold text-text mb-4">Почему выбирают нашу платформу</h2>
+                        <p class="text-xl text-gray-600 max-w-2xl mx-auto">Мы создали безопасную и удобную среду для получения психологической помощи</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-blue-50 p-8 rounded-2xl text-center">
+                            <div class="bg-primary text-white p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                                <i class="fas fa-user-md text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Проверенные специалисты</h3>
+                            <p class="text-gray-600">Все психологи проходят тщательную верификацию документов и имеют подтвержденную квалификацию</p>
+                        </div>
+                        
+                        <div class="bg-green-50 p-8 rounded-2xl text-center">
+                            <div class="bg-secondary text-white p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                                <i class="fas fa-video text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Онлайн консультации</h3>
+                            <p class="text-gray-600">Видео, аудио или чат - выберите удобный формат для проведения сессий</p>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-8 rounded-2xl text-center">
+                            <div class="bg-accent text-white p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                                <i class="fas fa-lock text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Полная конфиденциальность</h3>
+                            <p class="text-gray-600">Надежная защита данных и соблюдение врачебной тайны</p>
+                        </div>
+                        
+                        <div class="bg-yellow-50 p-8 rounded-2xl text-center">
+                            <div class="bg-yellow-500 text-white p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                                <i class="fas fa-calendar-alt text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Гибкое расписание</h3>
+                            <p class="text-gray-600">Записывайтесь на удобное время, включая вечерние часы и выходные</p>
+                        </div>
+                        
+                        <div class="bg-pink-50 p-8 rounded-2xl text-center">
+                            <div class="bg-pink-500 text-white p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                                <i class="fas fa-heart text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Персональный подход</h3>
+                            <p class="text-gray-600">Найдите специалиста по вашим конкретным запросам и потребностям</p>
+                        </div>
+                        
+                        <div class="bg-indigo-50 p-8 rounded-2xl text-center">
+                            <div class="bg-indigo-500 text-white p-4 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                                <i class="fas fa-credit-card text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Безопасные платежи</h3>
+                            <p class="text-gray-600">Защищенная система оплаты с возможностью возврата средств</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: FeaturesSection -->
+
+            <!-- How It Works Section -->
+            <!-- @COMPONENT: HowItWorksSection -->
+            <section class="py-20 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl lg:text-4xl font-bold text-text mb-4">Как это работает</h2>
+                        <p class="text-xl text-gray-600 max-w-2xl mx-auto">Простой процесс получения психологической помощи</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center">
+                            <div class="bg-primary text-white rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center text-2xl font-bold">1</div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Найдите специалиста</h3>
+                            <p class="text-gray-600">Используйте фильтры по специализации, цене, рейтингу и доступности для поиска подходящего психолога</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-secondary text-white rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center text-2xl font-bold">2</div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Запишитесь на сессию</h3>
+                            <p class="text-gray-600">Выберите удобное время в календаре специалиста и оплатите консультацию</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-accent text-white rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center text-2xl font-bold">3</div>
+                            <h3 class="text-xl font-semibold text-text mb-4">Проведите консультацию</h3>
+                            <p class="text-gray-600">Получите профессиональную помощь через видео, аудио или чат в удобное время</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: HowItWorksSection -->
+
+            <!-- CTA Section -->
+            <section class="py-20 bg-primary">
+                <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+                        Начните заботиться о своем ментальном здоровье уже сегодня
+                    </h2>
+                    <p class="text-xl text-blue-100 mb-8">
+                        Присоединитесь к тысячам людей, которые уже получили помощь через нашу платформу
+                    </p>
+                    <button class="bg-white text-primary px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition" data-action="get-started">
+                        Начать сейчас
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Psychologist Search Page -->
+        <div id="psychologist-search" class="page hidden">
+            <!-- @COMPONENT: PsychologistSearch [searchFilters, psychologists] -->
+            <section class="py-12 bg-gray-50 min-h-screen">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-bold text-text mb-4">Найти психолога</h1>
+                        <p class="text-gray-600">Выберите специалиста, который подходит именно вам</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                        <!-- Filters Sidebar -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-white rounded-xl shadow-sm p-6 sticky top-24">
+                                <h3 class="text-lg font-semibold text-text mb-4">Фильтры</h3>
+                                
+                                <!-- Specialization Filter -->
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium text-text mb-2">Специализация</label>
+                                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2" data-filter="specialization">
+                                        <option value="">Все специализации</option>
+                                        <option value="anxiety">Тревожные расстройства</option>
+                                        <option value="depression">Депрессия</option>
+                                        <option value="relationships">Отношения</option>
+                                        <option value="family">Семейная терапия</option>
+                                        <option value="trauma">Травмы</option>
+                                    </select>
+                                </div>
+
+                                <!-- Price Filter -->
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium text-text mb-2">Цена за сессию (₽)</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2" data-price="1000-2000">
+                                            <span class="text-sm">1000-2000</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2" data-price="2000-3000">
+                                            <span class="text-sm">2000-3000</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2" data-price="3000+">
+                                            <span class="text-sm">3000+</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Format Filter -->
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium text-text mb-2">Формат консультации</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2" data-format="video">
+                                            <span class="text-sm">Видео</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2" data-format="audio">
+                                            <span class="text-sm">Аудио</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2" data-format="chat">
+                                            <span class="text-sm">Чат</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-600 transition" data-action="apply-filters">
+                                    Применить фильтры
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Psychologist Grid -->
+                        <div class="lg:col-span-3">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- @MAP: psychologists.map(psychologist => ( -->
+                                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition p-6" data-mock="true">
+                                    <div class="flex items-start space-x-4">
+                                        <!-- Professional headshot of a psychologist in a calm office setting -->
+                                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" alt="Психолог" class="w-16 h-16 rounded-full object-cover" />
+                                        <div class="flex-1">
+                                            <h3 class="text-lg font-semibold text-text mb-1" data-bind="psychologist.name">Др. Анна Петрова</h3>
+                                            <p class="text-sm text-gray-600 mb-2" data-bind="psychologist.specialization">Семейный психолог</p>
+                                            <div class="flex items-center mb-2">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-600 ml-1" data-bind="psychologist.rating">5.0 (24 отзыва)</span>
+                                            </div>
+                                            <p class="text-sm text-gray-700 mb-3" data-bind="psychologist.experience">8 лет опыта</p>
+                                            <p class="text-sm text-gray-600 line-clamp-2" data-bind="psychologist.description">Специализируюсь на семейных отношениях, конфликтах в паре и детско-родительских отношениях</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 flex items-center justify-between">
+                                        <span class="text-lg font-semibold text-primary" data-bind="psychologist.price">₽2,500/сессия</span>
+                                        <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition" data-action="book-session" data-psychologist-id="1">
+                                            Записаться
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition p-6" data-mock="true">
+                                    <div class="flex items-start space-x-4">
+                                        <!-- Professional headshot of a male psychologist in a modern therapy office -->
+                                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" alt="Психолог" class="w-16 h-16 rounded-full object-cover" />
+                                        <div class="flex-1">
+                                            <h3 class="text-lg font-semibold text-text mb-1" data-bind="psychologist.name">Др. Михаил Сидоров</h3>
+                                            <p class="text-sm text-gray-600 mb-2" data-bind="psychologist.specialization">Когнитивно-поведенческая терапия</p>
+                                            <div class="flex items-center mb-2">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-600 ml-1" data-bind="psychologist.rating">4.8 (31 отзыв)</span>
+                                            </div>
+                                            <p class="text-sm text-gray-700 mb-3" data-bind="psychologist.experience">12 лет опыта</p>
+                                            <p class="text-sm text-gray-600 line-clamp-2" data-bind="psychologist.description">Работаю с тревожными расстройствами, депрессией и паническими атаками</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 flex items-center justify-between">
+                                        <span class="text-lg font-semibold text-primary" data-bind="psychologist.price">₽3,000/сессия</span>
+                                        <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition" data-action="book-session" data-psychologist-id="2">
+                                            Записаться
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition p-6" data-mock="true">
+                                    <div class="flex items-start space-x-4">
+                                        <!-- Professional headshot of a female psychologist with warm lighting -->
+                                        <img src="https://pixabay.com/get/gfea5ec37bb42c4c4447b0e6ea3bf53d6be671922fdb81139c824bcc23c8c6baa920e0de2073433a8e95fba2393072596807479494af32226b4088633e846b639_1280.jpg" alt="Психолог" class="w-16 h-16 rounded-full object-cover" />
+                                        <div class="flex-1">
+                                            <h3 class="text-lg font-semibold text-text mb-1" data-bind="psychologist.name">Др. Елена Кузнецова</h3>
+                                            <p class="text-sm text-gray-600 mb-2" data-bind="psychologist.specialization">Травматерапия</p>
+                                            <div class="flex items-center mb-2">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-600 ml-1" data-bind="psychologist.rating">4.9 (18 отзывов)</span>
+                                            </div>
+                                            <p class="text-sm text-gray-700 mb-3" data-bind="psychologist.experience">6 лет опыта</p>
+                                            <p class="text-sm text-gray-600 line-clamp-2" data-bind="psychologist.description">Специализируюсь на работе с травмами и ПТСР, использую методы EMDR</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 flex items-center justify-between">
+                                        <span class="text-lg font-semibold text-primary" data-bind="psychologist.price">₽3,500/сессия</span>
+                                        <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition" data-action="book-session" data-psychologist-id="3">
+                                            Записаться
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="mt-8 flex justify-center">
+                                <nav class="flex space-x-2">
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg text-gray-500" disabled>Предыдущая</button>
+                                    <button class="px-3 py-2 bg-primary text-white rounded-lg">1</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">2</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">3</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Следующая</button>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: PsychologistSearch -->
+        </div>
+
+        <!-- Booking Page -->
+        <div id="booking-page" class="page hidden">
+            <!-- @COMPONENT: BookingInterface [selectedPsychologist, availableSlots] -->
+            <section class="py-12 bg-gray-50 min-h-screen">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <!-- Psychologist Header -->
+                        <div class="bg-gradient-to-r from-primary to-secondary p-8 text-white">
+                            <div class="flex items-center space-x-6">
+                                <!-- Professional headshot of psychologist in booking context -->
+                                <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" alt="Др. Анна Петрова" class="w-24 h-24 rounded-full object-cover border-4 border-white" />
+                                <div>
+                                    <h1 class="text-2xl font-bold mb-2" data-bind="psychologist.name">Др. Анна Петрова</h1>
+                                    <p class="text-blue-100 mb-2" data-bind="psychologist.specialization">Семейный психолог</p>
+                                    <div class="flex items-center space-x-4 text-sm">
+                                        <span>⭐ 5.0 (24 отзыва)</span>
+                                        <span>• 8 лет опыта</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-8">
+                            <!-- Step Indicator -->
+                            <div class="flex items-center justify-center mb-8">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-medium">1</div>
+                                        <span class="ml-2 text-primary font-medium">Выбор времени</span>
+                                    </div>
+                                    <div class="w-12 h-0.5 bg-gray-300"></div>
+                                    <div class="flex items-center">
+                                        <div class="bg-gray-300 text-gray-500 rounded-full w-8 h-8 flex items-center justify-center text-sm font-medium">2</div>
+                                        <span class="ml-2 text-gray-500">Оплата</span>
+                                    </div>
+                                    <div class="w-12 h-0.5 bg-gray-300"></div>
+                                    <div class="flex items-center">
+                                        <div class="bg-gray-300 text-gray-500 rounded-full w-8 h-8 flex items-center justify-center text-sm font-medium">3</div>
+                                        <span class="ml-2 text-gray-500">Подтверждение</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <!-- Calendar Selection -->
+                                <div>
+                                    <h3 class="text-xl font-semibold text-text mb-4">Выберите дату и время</h3>
+                                    <div class="border rounded-xl p-4">
+                                        <!-- @FUNCTIONALITY: Calendar component should integrate with psychologist's availability -->
+                                        <div class="grid grid-cols-7 gap-2 mb-4">
+                                            <div class="text-center text-sm font-medium text-gray-500 py-2">ПН</div>
+                                            <div class="text-center text-sm font-medium text-gray-500 py-2">ВТ</div>
+                                            <div class="text-center text-sm font-medium text-gray-500 py-2">СР</div>
+                                            <div class="text-center text-sm font-medium text-gray-500 py-2">ЧТ</div>
+                                            <div class="text-center text-sm font-medium text-gray-500 py-2">ПТ</div>
+                                            <div class="text-center text-sm font-medium text-gray-500 py-2">СБ</div>
+                                            <div class="text-center text-sm font-medium text-gray-500 py-2">ВС</div>
+                                            
+                                            <!-- Calendar days with availability -->
+                                            <button class="p-2 text-gray-400 cursor-not-allowed">1</button>
+                                            <button class="p-2 text-gray-400 cursor-not-allowed">2</button>
+                                            <button class="p-2 hover:bg-blue-50 rounded-lg text-text">3</button>
+                                            <button class="p-2 hover:bg-blue-50 rounded-lg text-text">4</button>
+                                            <button class="p-2 bg-primary text-white rounded-lg">5</button>
+                                            <button class="p-2 hover:bg-blue-50 rounded-lg text-text">6</button>
+                                            <button class="p-2 hover:bg-blue-50 rounded-lg text-text">7</button>
+                                        </div>
+
+                                        <!-- Time Slots -->
+                                        <div class="mt-6">
+                                            <h4 class="font-medium text-text mb-3">Доступное время на 5 ноября:</h4>
+                                            <div class="grid grid-cols-3 gap-2">
+                                                <button class="p-2 border rounded-lg hover:border-primary hover:text-primary text-sm" data-time="09:00">09:00</button>
+                                                <button class="p-2 border rounded-lg hover:border-primary hover:text-primary text-sm" data-time="10:30">10:30</button>
+                                                <button class="p-2 bg-primary text-white rounded-lg text-sm" data-time="14:00">14:00</button>
+                                                <button class="p-2 border rounded-lg hover:border-primary hover:text-primary text-sm" data-time="15:30">15:30</button>
+                                                <button class="p-2 border rounded-lg hover:border-primary hover:text-primary text-sm" data-time="17:00">17:00</button>
+                                                <button class="p-2 border rounded-lg hover:border-primary hover:text-primary text-sm" data-time="18:30">18:30</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Session Details -->
+                                <div>
+                                    <h3 class="text-xl font-semibold text-text mb-4">Детали сессии</h3>
+                                    <div class="space-y-4">
+                                        <!-- Format Selection -->
+                                        <div>
+                                            <label class="block text-sm font-medium text-text mb-2">Формат консультации</label>
+                                            <div class="space-y-2">
+                                                <label class="flex items-center p-3 border rounded-lg hover:border-primary cursor-pointer">
+                                                    <input type="radio" name="format" value="video" class="mr-3" checked>
+                                                    <i class="fas fa-video mr-2 text-primary"></i>
+                                                    <span>Видео звонок</span>
+                                                </label>
+                                                <label class="flex items-center p-3 border rounded-lg hover:border-primary cursor-pointer">
+                                                    <input type="radio" name="format" value="audio" class="mr-3">
+                                                    <i class="fas fa-phone mr-2 text-secondary"></i>
+                                                    <span>Аудио звонок</span>
+                                                </label>
+                                                <label class="flex items-center p-3 border rounded-lg hover:border-primary cursor-pointer">
+                                                    <input type="radio" name="format" value="chat" class="mr-3">
+                                                    <i class="fas fa-comment mr-2 text-accent"></i>
+                                                    <span>Текстовый чат</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Session Notes -->
+                                        <div>
+                                            <label class="block text-sm font-medium text-text mb-2">Дополнительная информация (по желанию)</label>
+                                            <textarea class="w-full border rounded-lg px-3 py-2" rows="3" placeholder="Опишите кратко, с какими вопросами вы хотели бы обратиться..." data-field="session-notes"></textarea>
+                                        </div>
+
+                                        <!-- Booking Summary -->
+                                        <div class="bg-muted rounded-xl p-6">
+                                            <h4 class="font-semibold text-text mb-4">Детали бронирования</h4>
+                                            <div class="space-y-2 text-sm">
+                                                <div class="flex justify-between">
+                                                    <span>Дата:</span>
+                                                    <span data-bind="booking.date">5 ноября 2024</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span>Время:</span>
+                                                    <span data-bind="booking.time">14:00 - 14:50</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span>Формат:</span>
+                                                    <span data-bind="booking.format">Видео звонок</span>
+                                                </div>
+                                                <div class="flex justify-between font-semibold text-lg pt-2 border-t">
+                                                    <span>Итого:</span>
+                                                    <span data-bind="booking.total">₽2,500</span>
+                                                </div>
+                                            </div>
+                                            <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold mt-4 hover:bg-blue-600 transition" data-action="proceed-to-payment">
+                                                Перейти к оплате
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: BookingInterface -->
+        </div>
+
+        <!-- Client Dashboard -->
+        <div id="client-dashboard" class="page hidden">
+            <!-- @COMPONENT: ClientDashboard [user, appointments, messages] -->
+            <div class="min-h-screen bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-bold text-text">Личный кабинет</h1>
+                        <p class="text-gray-600 mt-2">Добро пожаловать, <span data-bind="user.name">Мария Иванова</span>!</p>
+                    </div>
+
+                    <!-- Dashboard Navigation -->
+                    <div class="bg-white rounded-xl shadow-sm mb-8">
+                        <nav class="flex space-x-8 px-6" data-dashboard-nav="client">
+                            <button class="py-4 text-primary border-b-2 border-primary font-medium" data-tab="appointments">Мои консультации</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="messages">Сообщения</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="profile">Профиль</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="billing">Платежи</button>
+                        </nav>
+                    </div>
+
+                    <!-- Appointments Tab -->
+                    <div id="appointments-tab" class="tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- Upcoming Appointments -->
+                            <div class="lg:col-span-2">
+                                <div class="bg-white rounded-xl shadow-sm p-6">
+                                    <div class="flex items-center justify-between mb-6">
+                                        <h2 class="text-xl font-semibold text-text">Предстоящие консультации</h2>
+                                        <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition" data-action="book-new-session">
+                                            Записаться
+                                        </button>
+                                    </div>
+
+                                    <!-- @MAP: upcomingAppointments.map(appointment => ( -->
+                                    <div class="space-y-4" data-mock="true">
+                                        <div class="border border-primary bg-blue-50 rounded-xl p-6">
+                                            <div class="flex items-start justify-between">
+                                                <div class="flex items-start space-x-4">
+                                                    <!-- Professional headshot for appointment card -->
+                                                    <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=80&h=80" alt="Психолог" class="w-12 h-12 rounded-full" />
+                                                    <div>
+                                                        <h3 class="font-semibold text-text" data-bind="appointment.psychologistName">Др. Анна Петрова</h3>
+                                                        <p class="text-sm text-gray-600" data-bind="appointment.specialization">Семейный психолог</p>
+                                                        <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                                                            <span data-bind="appointment.date">5 ноября, 14:00</span>
+                                                            <span>• Видео звонок</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="bg-secondary text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600 transition" data-action="join-session">
+                                                        Присоединиться
+                                                    </button>
+                                                    <button class="text-gray-500 hover:text-gray-700" data-action="more-options">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 flex items-center text-sm text-gray-600">
+                                                <i class="far fa-clock mr-2"></i>
+                                                <span>Начинается через 2 часа</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- @END_MAP )) -->
+
+                                    <!-- Past Sessions -->
+                                    <div class="mt-8">
+                                        <h3 class="text-lg font-semibold text-text mb-4">Прошедшие консультации</h3>
+                                        <div class="space-y-3">
+                                            <div class="border rounded-xl p-4 hover:bg-gray-50" data-mock="true">
+                                                <div class="flex items-center justify-between">
+                                                    <div>
+                                                        <p class="font-medium text-text">Др. Анна Петрова</p>
+                                                        <p class="text-sm text-gray-600">28 октября, 14:00 • Видео звонок</p>
+                                                    </div>
+                                                    <div class="flex space-x-2">
+                                                        <button class="text-primary hover:text-blue-600 text-sm" data-action="leave-review">
+                                                            Оставить отзыв
+                                                        </button>
+                                                        <button class="text-secondary hover:text-green-600 text-sm" data-action="book-again">
+                                                            Записаться снова
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions Sidebar -->
+                            <div class="space-y-6">
+                                <!-- Quick Stats -->
+                                <div class="bg-white rounded-xl shadow-sm p-6">
+                                    <h3 class="font-semibold text-text mb-4">Статистика</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Всего сессий:</span>
+                                            <span class="font-medium" data-bind="user.totalSessions">12</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Активных психологов:</span>
+                                            <span class="font-medium" data-bind="user.activePsychologists">2</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Следующая сессия:</span>
+                                            <span class="font-medium text-primary" data-bind="user.nextSession">Сегодня</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Favorite Psychologists -->
+                                <div class="bg-white rounded-xl shadow-sm p-6">
+                                    <h3 class="font-semibold text-text mb-4">Мои психологи</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center space-x-3" data-mock="true">
+                                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=60&h=60" alt="Психолог" class="w-10 h-10 rounded-full" />
+                                            <div class="flex-1">
+                                                <p class="font-medium text-text text-sm">Др. Анна Петрова</p>
+                                                <p class="text-xs text-gray-600">Семейный психолог</p>
+                                            </div>
+                                            <button class="text-primary hover:text-blue-600" data-action="message-psychologist">
+                                                <i class="fas fa-comment"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Book -->
+                                <div class="bg-gradient-to-r from-primary to-secondary rounded-xl p-6 text-white">
+                                    <h3 class="font-semibold mb-2">Нужна помощь?</h3>
+                                    <p class="text-sm text-blue-100 mb-4">Найдите подходящего специалиста</p>
+                                    <button class="bg-white text-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition" data-action="find-psychologist">
+                                        Найти психолога
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: ClientDashboard -->
+        </div>
+
+        <!-- Psychologist Dashboard -->
+        <div id="psychologist-dashboard" class="page hidden">
+            <!-- @COMPONENT: PsychologistDashboard [psychologist, schedule, earnings] -->
+            <div class="min-h-screen bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-bold text-text">Кабинет психолога</h1>
+                        <p class="text-gray-600 mt-2">Добро пожаловать, <span data-bind="psychologist.name">Др. Анна Петрова</span>!</p>
+                    </div>
+
+                    <!-- Dashboard Navigation -->
+                    <div class="bg-white rounded-xl shadow-sm mb-8">
+                        <nav class="flex space-x-8 px-6" data-dashboard-nav="psychologist">
+                            <button class="py-4 text-primary border-b-2 border-primary font-medium" data-tab="schedule">Расписание</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="clients">Клиенты</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="earnings">Доходы</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="profile">Профиль</button>
+                        </nav>
+                    </div>
+
+                    <!-- Schedule Tab -->
+                    <div id="schedule-tab" class="tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- Today's Schedule -->
+                            <div class="lg:col-span-2">
+                                <div class="bg-white rounded-xl shadow-sm p-6">
+                                    <div class="flex items-center justify-between mb-6">
+                                        <h2 class="text-xl font-semibold text-text">Сегодняшнее расписание</h2>
+                                        <div class="text-sm text-gray-500">5 ноября 2024</div>
+                                    </div>
+
+                                    <!-- Schedule Items -->
+                                    <div class="space-y-4">
+                                        <div class="border-l-4 border-primary bg-blue-50 p-4 rounded-r-xl" data-mock="true">
+                                            <div class="flex items-start justify-between">
+                                                <div>
+                                                    <p class="font-semibold text-text">14:00 - 14:50</p>
+                                                    <p class="text-gray-600" data-bind="appointment.clientName">Мария И.</p>
+                                                    <p class="text-sm text-gray-500">Первичная консультация • Видео звонок</p>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="bg-secondary text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600 transition" data-action="start-session">
+                                                        Начать
+                                                    </button>
+                                                    <button class="text-gray-500 hover:text-gray-700" data-action="session-options">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 flex items-center text-sm text-gray-600">
+                                                <i class="far fa-clock mr-2"></i>
+                                                <span>Начинается через 2 часа</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="border-l-4 border-gray-300 bg-gray-50 p-4 rounded-r-xl" data-mock="true">
+                                            <div class="flex items-start justify-between">
+                                                <div>
+                                                    <p class="font-semibold text-text">16:00 - 16:50</p>
+                                                    <p class="text-gray-600" data-bind="appointment.clientName">Александр С.</p>
+                                                    <p class="text-sm text-gray-500">Продолжение терапии • Аудио звонок</p>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="border border-gray-300 text-gray-600 px-3 py-1 rounded-lg text-sm" data-action="prepare-session">
+                                                        Подготовиться
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Free time slot -->
+                                        <div class="border-2 border-dashed border-gray-300 p-4 rounded-xl text-center">
+                                            <p class="text-gray-500">18:00 - 19:00</p>
+                                            <p class="text-sm text-gray-400">Свободное время</p>
+                                            <button class="text-primary hover:text-blue-600 text-sm mt-2" data-action="block-time">
+                                                Заблокировать время
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Stats and Actions -->
+                            <div class="space-y-6">
+                                <!-- Today's Stats -->
+                                <div class="bg-white rounded-xl shadow-sm p-6">
+                                    <h3 class="font-semibold text-text mb-4">Сегодня</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="bg-primary text-white p-2 rounded-lg">
+                                                <i class="fas fa-calendar-check"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium" data-bind="stats.todaySessions">3 сессии</p>
+                                                <p class="text-sm text-gray-600">Запланировано</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="bg-secondary text-white p-2 rounded-lg">
+                                                <i class="fas fa-ruble-sign"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium" data-bind="stats.todayEarnings">₽7,500</p>
+                                                <p class="text-sm text-gray-600">Доход за день</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-3">
+                                            <div class="bg-accent text-white p-2 rounded-lg">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium" data-bind="stats.activeClients">12 клиентов</p>
+                                                <p class="text-sm text-gray-600">Активные</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Actions -->
+                                <div class="bg-white rounded-xl shadow-sm p-6">
+                                    <h3 class="font-semibold text-text mb-4">Быстрые действия</h3>
+                                    <div class="space-y-3">
+                                        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-50 flex items-center space-x-3" data-action="manage-schedule">
+                                            <i class="fas fa-calendar-alt text-primary"></i>
+                                            <span>Управление расписанием</span>
+                                        </button>
+                                        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-50 flex items-center space-x-3" data-action="view-messages">
+                                            <i class="fas fa-envelope text-secondary"></i>
+                                            <span>Сообщения от клиентов</span>
+                                        </button>
+                                        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-50 flex items-center space-x-3" data-action="earnings-report">
+                                            <i class="fas fa-chart-line text-accent"></i>
+                                            <span>Отчет о доходах</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Profile Status -->
+                                <div class="bg-gradient-to-r from-secondary to-green-600 rounded-xl p-6 text-white">
+                                    <h3 class="font-semibold mb-2">Статус профиля</h3>
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span class="text-sm">Верифицирован</span>
+                                    </div>
+                                    <p class="text-sm text-green-100 mb-4">Ваш профиль активен и виден клиентам</p>
+                                    <button class="bg-white text-secondary px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition" data-action="edit-profile">
+                                        Редактировать профиль
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: PsychologistDashboard -->
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="page hidden">
+            <!-- @COMPONENT: AdminDashboard [stats, pendingApprovals, reports] -->
+            <div class="min-h-screen bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-bold text-text">Панель администратора</h1>
+                        <p class="text-gray-600 mt-2">Управление платформой психологической помощи</p>
+                    </div>
+
+                    <!-- Admin Navigation -->
+                    <div class="bg-white rounded-xl shadow-sm mb-8">
+                        <nav class="flex space-x-8 px-6" data-dashboard-nav="admin">
+                            <button class="py-4 text-primary border-b-2 border-primary font-medium" data-tab="overview">Обзор</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="users">Пользователи</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="approvals">Верификация</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="payments">Платежи</button>
+                            <button class="py-4 text-gray-500 hover:text-primary" data-tab="reports">Отчеты</button>
+                        </nav>
+                    </div>
+
+                    <!-- Overview Tab -->
+                    <div id="overview-tab" class="tab-content">
+                        <!-- Key Metrics -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-white rounded-xl shadow-sm p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Всего пользователей</p>
+                                        <p class="text-2xl font-bold text-text" data-bind="stats.totalUsers">1,247</p>
+                                    </div>
+                                    <div class="bg-primary text-white p-3 rounded-lg">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-2 flex items-center text-sm">
+                                    <span class="text-green-600">↗ +12%</span>
+                                    <span class="text-gray-600 ml-2">за месяц</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-sm p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Активных психологов</p>
+                                        <p class="text-2xl font-bold text-text" data-bind="stats.activePsychologists">186</p>
+                                    </div>
+                                    <div class="bg-secondary text-white p-3 rounded-lg">
+                                        <i class="fas fa-user-md"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-2 flex items-center text-sm">
+                                    <span class="text-green-600">↗ +8%</span>
+                                    <span class="text-gray-600 ml-2">за месяц</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-sm p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Сессий за месяц</p>
+                                        <p class="text-2xl font-bold text-text" data-bind="stats.monthlySessions">3,421</p>
+                                    </div>
+                                    <div class="bg-accent text-white p-3 rounded-lg">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-2 flex items-center text-sm">
+                                    <span class="text-green-600">↗ +15%</span>
+                                    <span class="text-gray-600 ml-2">за месяц</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-sm p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-600">Доход платформы</p>
+                                        <p class="text-2xl font-bold text-text" data-bind="stats.platformRevenue">₽342,150</p>
+                                    </div>
+                                    <div class="bg-yellow-500 text-white p-3 rounded-lg">
+                                        <i class="fas fa-ruble-sign"></i>
+                                    </div>
+                                </div>
+                                <div class="mt-2 flex items-center text-sm">
+                                    <span class="text-green-600">↗ +23%</span>
+                                    <span class="text-gray-600 ml-2">за месяц</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- Recent Activity -->
+                            <div class="lg:col-span-2">
+                                <div class="bg-white rounded-xl shadow-sm p-6">
+                                    <h3 class="text-xl font-semibold text-text mb-6">Недавняя активность</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex items-center space-x-4" data-mock="true">
+                                            <div class="bg-green-100 text-green-600 p-2 rounded-lg">
+                                                <i class="fas fa-user-check"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="font-medium text-text">Новая регистрация психолога</p>
+                                                <p class="text-sm text-gray-600">Др. Елена Смирнова зарегистрировалась на платформе</p>
+                                            </div>
+                                            <span class="text-sm text-gray-500">2 мин назад</span>
+                                        </div>
+
+                                        <div class="flex items-center space-x-4" data-mock="true">
+                                            <div class="bg-blue-100 text-blue-600 p-2 rounded-lg">
+                                                <i class="fas fa-calendar-plus"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="font-medium text-text">Новая запись на сессию</p>
+                                                <p class="text-sm text-gray-600">Клиент записался к Др. Петровой на завтра</p>
+                                            </div>
+                                            <span class="text-sm text-gray-500">15 мин назад</span>
+                                        </div>
+
+                                        <div class="flex items-center space-x-4" data-mock="true">
+                                            <div class="bg-yellow-100 text-yellow-600 p-2 rounded-lg">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="font-medium text-text">Требуется модерация</p>
+                                                <p class="text-sm text-gray-600">Отзыв клиента ожидает проверки</p>
+                                            </div>
+                                            <span class="text-sm text-gray-500">1 час назад</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pending Tasks -->
+                            <div>
+                                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                                    <h3 class="font-semibold text-text mb-4">Ожидающие задачи</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-600">Верификация документов</span>
+                                            <span class="bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs font-medium" data-bind="tasks.pendingVerifications">7</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-600">Модерация отзывов</span>
+                                            <span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full text-xs font-medium" data-bind="tasks.pendingReviews">3</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-600">Споры по платежам</span>
+                                            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded-full text-xs font-medium" data-bind="tasks.paymentDisputes">2</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- System Health -->
+                                <div class="bg-white rounded-xl shadow-sm p-6">
+                                    <h3 class="font-semibold text-text mb-4">Состояние системы</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-600">Сервер</span>
+                                            <span class="flex items-center text-green-600">
+                                                <i class="fas fa-circle text-xs mr-1"></i>
+                                                Работает
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-600">База данных</span>
+                                            <span class="flex items-center text-green-600">
+                                                <i class="fas fa-circle text-xs mr-1"></i>
+                                                Работает
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-gray-600">Видео сервис</span>
+                                            <span class="flex items-center text-yellow-600">
+                                                <i class="fas fa-circle text-xs mr-1"></i>
+                                                Нагрузка
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: AdminDashboard -->
+        </div>
+
+        <!-- Video Consultation Interface -->
+        <div id="video-consultation" class="page hidden">
+            <!-- @COMPONENT: VideoConsultation [session, participants] -->
+            <div class="fixed inset-0 bg-gray-900">
+                <div class="h-full flex flex-col">
+                    <!-- Header -->
+                    <div class="bg-gray-800 text-white p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <h2 class="text-lg font-semibold" data-bind="session.title">Консультация с Др. Анной Петровой</h2>
+                            <span class="bg-red-600 px-3 py-1 rounded-full text-sm">● В эфире</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm">
+                            <i class="far fa-clock"></i>
+                            <span id="session-timer" data-timer="start">00:15:32</span>
+                        </div>
+                    </div>
+
+                    <!-- Video Area -->
+                    <div class="flex-1 relative bg-black">
+                        <!-- @FUNCTIONALITY: Video streams should be implemented using WebRTC -->
+                        <!-- Main video (remote participant) -->
+                        <div class="w-full h-full bg-gray-800 flex items-center justify-center">
+                            <!-- Placeholder for remote video stream -->
+                            <div class="text-center text-white">
+                                <div class="bg-primary rounded-full w-32 h-32 flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-user text-4xl"></i>
+                                </div>
+                                <p class="text-xl font-medium" data-bind="session.psychologistName">Др. Анна Петрова</p>
+                                <p class="text-gray-400">Видео отключено</p>
+                            </div>
+                        </div>
+
+                        <!-- Picture-in-picture (local participant) -->
+                        <div class="absolute top-4 right-4 w-48 h-36 bg-gray-700 rounded-lg overflow-hidden border-2 border-white">
+                            <div class="w-full h-full bg-gray-600 flex items-center justify-center text-white">
+                                <div class="text-center">
+                                    <div class="bg-gray-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-2">
+                                        <i class="fas fa-user text-xl"></i>
+                                    </div>
+                                    <p class="text-sm">Вы</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Panel (toggleable) -->
+                        <div id="chat-panel" class="absolute top-0 right-0 w-80 h-full bg-white shadow-xl transform translate-x-full transition-transform">
+                            <div class="h-full flex flex-col">
+                                <div class="p-4 border-b">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-semibold text-text">Чат</h3>
+                                        <button class="text-gray-500 hover:text-gray-700" data-action="close-chat">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex-1 p-4 overflow-y-auto">
+                                    <div class="space-y-4">
+                                        <div class="flex items-start space-x-3" data-mock="true">
+                                            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=40&h=40" alt="Психолог" class="w-8 h-8 rounded-full" />
+                                            <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                                                <p class="text-sm">Добро пожаловать на сессию! Как дела?</p>
+                                                <span class="text-xs text-gray-500">14:02</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 border-t">
+                                    <div class="flex space-x-2">
+                                        <input type="text" class="flex-1 border rounded-lg px-3 py-2" placeholder="Напишите сообщение..." data-input="chat-message">
+                                        <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition" data-action="send-message">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="bg-gray-800 p-6">
+                        <div class="flex items-center justify-center space-x-4">
+                            <!-- Mute button -->
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-full transition" data-action="toggle-audio" data-state="unmuted">
+                                <i class="fas fa-microphone text-xl"></i>
+                            </button>
+
+                            <!-- Video button -->
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-full transition" data-action="toggle-video" data-state="off">
+                                <i class="fas fa-video-slash text-xl"></i>
+                            </button>
+
+                            <!-- Screen share button -->
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-full transition" data-action="toggle-screen-share">
+                                <i class="fas fa-desktop text-xl"></i>
+                            </button>
+
+                            <!-- Chat button -->
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-full transition" data-action="toggle-chat">
+                                <i class="fas fa-comment text-xl"></i>
+                            </button>
+
+                            <!-- End call button -->
+                            <button class="bg-red-600 hover:bg-red-700 text-white p-4 rounded-full transition" data-action="end-session">
+                                <i class="fas fa-phone-slash text-xl"></i>
+                            </button>
+                        </div>
+
+                        <!-- Session info -->
+                        <div class="text-center mt-4 text-gray-400 text-sm">
+                            <p>Защищенное соединение • Запись не ведется</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: VideoConsultation -->
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registration-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <!-- @COMPONENT: RegistrationModal [userType] -->
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-8">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-text mb-2">Создать аккаунт</h2>
+                    <p class="text-gray-600">Выберите тип аккаунта</p>
+                </div>
+
+                <div class="space-y-4">
+                    <button class="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition text-left" data-usertype="client">
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-primary text-white p-3 rounded-lg">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-text">Я клиент</p>
+                                <p class="text-sm text-gray-600">Ищу психологическую помощь</p>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-secondary hover:bg-green-50 transition text-left" data-usertype="psychologist">
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-secondary text-white p-3 rounded-lg">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-text">Я психолог</p>
+                                <p class="text-sm text-gray-600">Хочу оказывать помощь клиентам</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600 mb-4">Уже есть аккаунт?</p>
+                    <button class="text-primary hover:text-blue-600 font-medium" data-action="show-login">
+                        Войти в систему
+                    </button>
+                </div>
+
+                <button class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" data-action="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: RegistrationModal -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-text text-white py-12" id="site-footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">PsychPlatform</h3>
+                    <p class="text-gray-300 mb-4">Профессиональная психологическая помощь онлайн</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Для клиентов</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">Найти психолога</a></li>
+                        <li><a href="#" class="hover:text-white">Как это работает</a></li>
+                        <li><a href="#" class="hover:text-white">Цены</a></li>
+                        <li><a href="#" class="hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Для психологов</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">Стать специалистом</a></li>
+                        <li><a href="#" class="hover:text-white">Требования</a></li>
+                        <li><a href="#" class="hover:text-white">Условия работы</a></li>
+                        <li><a href="#" class="hover:text-white">Поддержка</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Компания</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">О нас</a></li>
+                        <li><a href="#" class="hover:text-white">Карьера</a></li>
+                        <li><a href="#" class="hover:text-white">Политика конфиденциальности</a></li>
+                        <li><a href="#" class="hover:text-white">Условия использования</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 PsychPlatform. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            // Navigation functionality
+            let currentPage = 'landing-page';
+            
+            function showPage(pageId) {
+                // Hide all pages
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.add('hidden');
+                    page.classList.remove('active');
+                });
+                
+                // Show selected page
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.remove('hidden');
+                    targetPage.classList.add('active');
+                    currentPage = pageId;
+                }
+                
+                // Hide footer on dashboard pages
+                const footer = document.getElementById('site-footer');
+                const isDashboard = pageId.includes('dashboard') || pageId.includes('consultation');
+                footer.style.display = isDashboard ? 'none' : 'block';
+            }
+            
+            // Event listeners for navigation
+            document.addEventListener('click', function(e) {
+                const action = e.target.dataset.action || e.target.closest('[data-action]')?.dataset.action;
+                
+                switch(action) {
+                    case 'register':
+                        document.getElementById('registration-modal').classList.remove('hidden');
+                        break;
+                    case 'login':
+                        // TODO: Implement login functionality
+                        console.log('Login action');
+                        break;
+                    case 'find-psychologist':
+                        showPage('psychologist-search');
+                        break;
+                    case 'become-psychologist':
+                        document.getElementById('registration-modal').classList.remove('hidden');
+                        break;
+                    case 'book-session':
+                        showPage('booking-page');
+                        break;
+                    case 'get-started':
+                        showPage('psychologist-search');
+                        break;
+                    case 'close-modal':
+                        document.querySelectorAll('.fixed').forEach(modal => {
+                            modal.classList.add('hidden');
+                        });
+                        break;
+                    case 'proceed-to-payment':
+                        // TODO: Implement payment processing
+                        console.log('Proceed to payment');
+                        break;
+                    case 'start-session':
+                    case 'join-session':
+                        showPage('video-consultation');
+                        break;
+                    case 'end-session':
+                        showPage('client-dashboard');
+                        break;
+                    case 'toggle-chat':
+                        const chatPanel = document.getElementById('chat-panel');
+                        chatPanel.classList.toggle('translate-x-full');
+                        break;
+                    case 'toggle-audio':
+                        const audioBtn = e.target.closest('button');
+                        const isMuted = audioBtn.dataset.state === 'muted';
+                        audioBtn.dataset.state = isMuted ? 'unmuted' : 'muted';
+                        audioBtn.innerHTML = isMuted ? '<i class="fas fa-microphone text-xl"></i>' : '<i class="fas fa-microphone-slash text-xl"></i>';
+                        break;
+                    case 'toggle-video':
+                        const videoBtn = e.target.closest('button');
+                        const isOff = videoBtn.dataset.state === 'off';
+                        videoBtn.dataset.state = isOff ? 'on' : 'off';
+                        videoBtn.innerHTML = isOff ? '<i class="fas fa-video text-xl"></i>' : '<i class="fas fa-video-slash text-xl"></i>';
+                        break;
+                    default:
+                        // Handle navigation clicks
+                        const nav = e.target.dataset.nav;
+                        if (nav === 'psychologists') {
+                            showPage('psychologist-search');
+                        }
+                        break;
+                }
+            });
+            
+            // Tab switching for dashboards
+            document.addEventListener('click', function(e) {
+                const tab = e.target.dataset.tab;
+                if (tab) {
+                    // Update active tab styling
+                    const nav = e.target.closest('nav');
+                    if (nav) {
+                        nav.querySelectorAll('button').forEach(btn => {
+                            btn.classList.remove('text-primary', 'border-b-2', 'border-primary');
+                            btn.classList.add('text-gray-500');
+                        });
+                        e.target.classList.remove('text-gray-500');
+                        e.target.classList.add('text-primary', 'border-b-2', 'border-primary');
+                    }
+                    
+                    // TODO: Implement tab content switching
+                    console.log('Switch to tab:', tab);
+                }
+            });
+            
+            // User type selection
+            document.addEventListener('click', function(e) {
+                const userType = e.target.closest('[data-usertype]')?.dataset.usertype;
+                if (userType) {
+                    // TODO: Implement registration flow based on user type
+                    console.log('Selected user type:', userType);
+                    document.getElementById('registration-modal').classList.add('hidden');
+                    
+                    // Redirect to appropriate dashboard for demo
+                    if (userType === 'client') {
+                        setTimeout(() => showPage('client-dashboard'), 500);
+                    } else if (userType === 'psychologist') {
+                        setTimeout(() => showPage('psychologist-dashboard'), 500);
+                    }
+                }
+            });
+            
+            // Session timer for video consultation
+            function startSessionTimer() {
+                let seconds = 0;
+                const timer = document.getElementById('session-timer');
+                if (timer && timer.dataset.timer === 'start') {
+                    setInterval(() => {
+                        seconds++;
+                        const hours = Math.floor(seconds / 3600);
+                        const mins = Math.floor((seconds % 3600) / 60);
+                        const secs = seconds % 60;
+                        timer.textContent = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    }, 1000);
+                }
+            }
+            
+            // Initialize timer when video page is shown
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        const target = mutation.target;
+                        if (target.id === 'video-consultation' && !target.classList.contains('hidden')) {
+                            startSessionTimer();
+                        }
+                    }
+                });
+            });
+            
+            const videoPage = document.getElementById('video-consultation');
+            if (videoPage) {
+                observer.observe(videoPage, { attributes: true });
+            }
+            
+            // Initialize app
+            console.log('PsychPlatform initialized');
+        })();
+    </script>
+</body>
+</html>
