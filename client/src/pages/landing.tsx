@@ -37,8 +37,8 @@ export default function Landing() {
             </div>
             
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+              <img
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
                 alt="Professional therapy session" 
                 className="rounded-2xl shadow-2xl w-full h-auto"
               />
