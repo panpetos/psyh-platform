@@ -1,34 +1,34 @@
+// client/src/lib/auth.ts
 import { AuthUser } from "@/types";
 
-// локальное состояние
 let currentUser: AuthUser | null = null;
 let authListeners: ((user: AuthUser | null) => void)[] = [];
 
-// универсальный API-запрос
-async function api<T>(path: string, init: RequestInit = {}) {
-  const r = await fetch(`/api${path}`, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(init.headers || {}) },
-    ...init,
-  });
+// Универсальный парсер ответа API — поддерживает разные формы:
+// { ok, data: [{...}] } ИЛИ { ok, data: { user: {...} } } ИЛИ { ok, data: {...} }
+function parseUser(payload: any): AuthUser | null {
+  const d = payload?.data;
 
-  let body: any = null;
-  try { body = await r.json(); } catch {}
+  // 1) {data: [{...}]}
+  const fromArray = Array.isArray(d) ? d[0] : null;
 
-  if (r.ok && body?.ok !== false) {
-    const data = body?.data ?? body;
-    return { ok: true, data } as { ok: true; data: T };
-  }
+  // 2) {data: {user: {...}}}
+  const fromUser = d?.user ?? null;
 
-  const msg =
-    body?.error ??
-    body?.message ??
-    body?.errors?.[0]?.message ??
-    `HTTP ${r.status}`;
-  throw new Error(msg);
+  // 3) {data: {...}}
+  const fromObject = d && !Array.isArray(d) && !d.user ? d : null;
+
+  const raw = fromArray ?? fromUser ?? fromObject ?? null;
+  if (!raw) return null;
+
+  return {
+    id: Number(raw.id),
+    email: String(raw.email ?? ""),
+    name: String(raw.name ?? ""),
+    role: (raw.role ?? "user") as AuthUser["role"],
+  };
 }
 
-// экспортируем authService (как раньше)
 export const authService = {
   getCurrentUser(): AuthUser | null {
     return currentUser;
@@ -36,36 +36,54 @@ export const authService = {
 
   setCurrentUser(user: AuthUser | null) {
     currentUser = user;
-    authListeners.forEach(listener => listener(user));
+    authListeners.forEach((listener) => listener(user));
   },
 
   onAuthChange(listener: (user: AuthUser | null) => void) {
     authListeners.push(listener);
     return () => {
-      authListeners = authListeners.filter(l => l !== listener);
+      authListeners = authListeners.filter((l) => l !== listener);
     };
   },
 
-  // ✅ вход
+  // Автовход по сессии
+  async me(): Promise<AuthUser | null> {
+    const r = await fetch("/api/auth/me", { credentials: "include" });
+    const json = await r.json();
+    const user = parseUser(json);
+    this.setCurrentUser(user);
+    return user;
+  },
+
+  // Логин
   async login(email: string, password: string): Promise<AuthUser> {
-    const { data } = await api<AuthUser>('/auth/login', {
-      method: 'POST',
+    const r = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
-    this.setCurrentUser(data);
-    return data;
+
+    const json = await r.json();
+    if (!r.ok || json?.ok === false) {
+      throw new Error(json?.error || "Ошибка входа");
+    }
+
+    const user = parseUser(json);
+    if (!user) {
+      throw new Error("Неверный ответ сервера (user)");
+    }
+
+    this.setCurrentUser(user);
+    return user;
   },
 
-  // ✅ выход
+  // Выход
   async logout(): Promise<void> {
-    await api('/auth/logout', { method: 'POST' });
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
     this.setCurrentUser(null);
-  },
-
-  // ✅ проверка авторизации
-  async fetchUser(): Promise<AuthUser | null> {
-    const { data } = await api<{ user: AuthUser | null }>('/auth/me');
-    this.setCurrentUser(data.user ?? null);
-    return data.user ?? null;
   },
 };
