@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { authService } from "@/lib/auth";
 import { User, UserCog, Eye, EyeOff } from "lucide-react";
@@ -15,57 +20,22 @@ interface RegisterModalProps {
 }
 
 export default function RegisterModal({ open, onClose, onShowLogin }: RegisterModalProps) {
-  const [step, setStep] = useState<'role' | 'form'>('role');
-  const [role, setRole] = useState<'client' | 'psychologist'>('client');
+  const [step, setStep] = useState<"role" | "form">("role");
+  const [role, setRole] = useState<"client" | "psychologist">("client");
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    firstName: '',
-    lastName: '',
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleRoleSelect = (selectedRole: 'client' | 'psychologist') => {
-    setRole(selectedRole);
-    setStep('form');
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      await authService.register({
-        ...formData,
-        role,
-      });
-      
-      toast({
-        title: "Регистрация успешна",
-        description: role === 'psychologist' 
-          ? "Ваш аккаунт создан. После проверки документов вы сможете принимать клиентов."
-          : "Добро пожаловать в PsychPlatform!",
-      });
-      
-      onClose();
-      resetForm();
-    } catch (error) {
-      toast({
-        title: "Ошибка регистрации",
-        description: error instanceof Error ? error.message : "Попробуйте еще раз",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const resetForm = () => {
-    setStep('role');
-    setRole('client');
-    setFormData({ email: '', password: '', firstName: '', lastName: '' });
+    setStep("role");
+    setRole("client");
+    setFormData({ email: "", password: "", firstName: "", lastName: "" });
     setShowPassword(false);
   };
 
@@ -74,16 +44,75 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
     resetForm();
   };
 
+  const handleRoleSelect = (selectedRole: "client" | "psychologist") => {
+    setRole(selectedRole);
+    setStep("form");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
+
+    try {
+      // 1) Регистрируем на бэке (создаётся сессия + cookie)
+      const res = await authService.register({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        role,
+      });
+
+      if (!res?.ok) {
+        throw new Error(res?.error || "Не удалось зарегистрироваться");
+      }
+
+      // 2) На всякий случай подтягиваем /api/auth/me, чтобы фронт знал о пользователе
+      try {
+        await authService.fetchMe?.(); // безопасно, если в сервисе есть такой метод
+      } catch {
+        /* no-op: просто продолжаем редирект */
+      }
+
+      toast({
+        title: "Регистрация успешна",
+        description:
+          role === "psychologist"
+            ? "Аккаунт создан. После проверки документов вы сможете принимать клиентов."
+            : "Добро пожаловать в PsychPlatform!",
+      });
+
+      // 3) Закрываем модалку и делаем явный редирект.
+      // На статике это гарантированно “пересоберёт” состояние приложения.
+      handleClose();
+      window.location.href = "/?welcome=1";
+    } catch (error) {
+      toast({
+        title: "Ошибка регистрации",
+        description:
+          error instanceof Error ? error.message : "Попробуйте ещё раз",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={open} onOpenChange={(v) => (!v ? handleClose() : undefined)}>
       <DialogContent className="sm:max-w-md" data-testid="register-modal">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-text-custom">
             Создать аккаунт
           </DialogTitle>
+          {/* добавили описание — уберёт предупреждение про describedby */}
+          <DialogDescription className="sr-only">
+            Регистрация нового пользователя PsychPlatform
+          </DialogDescription>
         </DialogHeader>
 
-        {step === 'role' ? (
+        {step === "role" ? (
           <div className="space-y-4">
             <p className="text-center text-gray-600 mb-6">
               Выберите тип аккаунта
@@ -91,7 +120,7 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
 
             <div className="space-y-3">
               <button
-                onClick={() => handleRoleSelect('client')}
+                onClick={() => handleRoleSelect("client")}
                 className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-primary-custom hover:bg-blue-50 transition text-left"
                 data-testid="role-client"
               >
@@ -101,13 +130,15 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
                   </div>
                   <div>
                     <p className="font-semibold text-text-custom">Я клиент</p>
-                    <p className="text-sm text-gray-600">Ищу психологическую помощь</p>
+                    <p className="text-sm text-gray-600">
+                      Ищу психологическую помощь
+                    </p>
                   </div>
                 </div>
               </button>
 
               <button
-                onClick={() => handleRoleSelect('psychologist')}
+                onClick={() => handleRoleSelect("psychologist")}
                 className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-secondary-custom hover:bg-green-50 transition text-left"
                 data-testid="role-psychologist"
               >
@@ -117,7 +148,9 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
                   </div>
                   <div>
                     <p className="font-semibold text-text-custom">Я психолог</p>
-                    <p className="text-sm text-gray-600">Хочу оказывать помощь клиентам</p>
+                    <p className="text-sm text-gray-600">
+                      Хочу оказывать помощь клиентам
+                    </p>
                   </div>
                 </div>
               </button>
@@ -138,13 +171,23 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="text-center mb-4">
-              <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${
-                role === 'client' 
-                  ? 'bg-blue-100 text-primary-custom' 
-                  : 'bg-green-100 text-secondary-custom'
-              }`}>
-                {role === 'client' ? <User className="h-4 w-4" /> : <UserCog className="h-4 w-4" />}
-                <span>{role === 'client' ? 'Регистрация клиента' : 'Регистрация психолога'}</span>
+              <div
+                className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${
+                  role === "client"
+                    ? "bg-blue-100 text-primary-custom"
+                    : "bg-green-100 text-secondary-custom"
+                }`}
+              >
+                {role === "client" ? (
+                  <User className="h-4 w-4" />
+                ) : (
+                  <UserCog className="h-4 w-4" />
+                )}
+                <span>
+                  {role === "client"
+                    ? "Регистрация клиента"
+                    : "Регистрация психолога"}
+                </span>
               </div>
             </div>
 
@@ -154,7 +197,12 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
                 <Input
                   id="firstName"
                   value={formData.firstName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      firstName: e.target.value,
+                    }))
+                  }
                   placeholder="Ваше имя"
                   required
                   data-testid="input-firstName"
@@ -165,7 +213,12 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
                 <Input
                   id="lastName"
                   value={formData.lastName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      lastName: e.target.value,
+                    }))
+                  }
                   placeholder="Ваша фамилия"
                   required
                   data-testid="input-lastName"
@@ -179,7 +232,9 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, email: e.target.value }))
+                }
                 placeholder="your@email.com"
                 required
                 data-testid="input-email"
@@ -193,7 +248,9 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
-                  onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, password: e.target.value }))
+                  }
                   placeholder="Минимум 6 символов"
                   minLength={6}
                   required
@@ -220,8 +277,9 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setStep('role')}
+                onClick={() => setStep("role")}
                 className="flex-1"
+                disabled={isLoading}
                 data-testid="button-back"
               >
                 Назад
@@ -229,9 +287,9 @@ export default function RegisterModal({ open, onClose, onShowLogin }: RegisterMo
               <Button
                 type="submit"
                 className={`flex-1 text-white ${
-                  role === 'client'
-                    ? 'bg-primary-custom hover:bg-primary-custom/90'
-                    : 'bg-secondary-custom hover:bg-secondary-custom/90'
+                  role === "client"
+                    ? "bg-primary-custom hover:bg-primary-custom/90"
+                    : "bg-secondary-custom hover:bg-secondary-custom/90"
                 }`}
                 disabled={isLoading}
                 data-testid="button-submit-register"
