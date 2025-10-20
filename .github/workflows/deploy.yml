@@ -1,4 +1,4 @@
-name: "🚀 Deploy Vite front to REG.RU"
+name: 🚀 Deploy Vite front to REG.RU
 
 on:
   push:
@@ -16,32 +16,25 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci || npm i
 
-      - name: Build project
+      - name: Build
         run: npm run build
 
       - name: Add .htaccess to dist
         run: |
           cat > dist/.htaccess << 'EOF'
-          # --- Gzip ---
           <IfModule mod_deflate.c>
             AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
           </IfModule>
 
-          # --- API routing (должен быть ПЕРЕД SPA) ---
           RewriteEngine On
           RewriteBase /
-          RewriteCond %{REQUEST_URI} ^/api/ [NC]
-          RewriteRule ^api/(.*)$ api/index.php [L,QSA]
-
-          # --- SPA fallback ---
           RewriteCond %{REQUEST_FILENAME} !-f
           RewriteCond %{REQUEST_FILENAME} !-d
           RewriteRule . /index.html [L]
 
-          # --- No cache for HTML ---
           <IfModule mod_headers.c>
             <FilesMatch "\.html$">
               Header set Cache-Control "no-cache, no-store, must-revalidate"
@@ -51,19 +44,30 @@ jobs:
           </IfModule>
           EOF
 
-      - name: Upload via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+      - name: FTP deploy (dist → site root)
+        uses: SamKirkland/FTP-Deploy-Action@4.3.4
         with:
-          server:   ${{ secrets.FTP_SERVER }}          # оставь как у тебя в секретах
+          server:   ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          protocol: ftps
-          local-dir: dist/                             # грузим ТОЛЬКО билд
-          server-dir: /www/psyh.vakulskiy.team/       # путь к корню сайта на REG.RU
-          dangerous-clean-slate: false                # ничего не удаляем на сервере
+
+          # Заливаем только сборку
+          local-dir: dist/
+
+          # ВАЖНО: абсолютный путь до корня сайта вашего FTP-пользователя
+          # если у пользователя root = /var/www/u3105470/data/www/psyh.vakulskiy.team/
+          server-dir: /
+
+          # Полная очистка перед загрузкой (кроме исключений)
+          dangerous-clean-slate: true
+
+          # Новый файл состояния, чтобы забыть старую структуру
+          state-name: .ftp-deploy-state-front.json
+
+          # Не трогаем api и .htaccess на сервере
           exclude: |
+            api/**
+            .htaccess
             **/.git*
-            .github/**
             **/node_modules/**
             **/*.map
-            api/**                                     # API не трогаем
