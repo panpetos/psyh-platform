@@ -9,24 +9,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Код
       - uses: actions/checkout@v4
 
-      # 2) Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      # 3) Зависимости
       - name: Install dependencies
         run: npm ci || npm i
 
-      # 4) Сборка
       - name: Build project
         run: npm run build
 
-      # 5) Кладём корректный .htaccess прямо в dist/
       - name: Add .htaccess to dist
         run: |
           cat > dist/.htaccess << 'EOF'
@@ -35,7 +30,7 @@ jobs:
             AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
           </IfModule>
 
-          # --- API роутинг (должен идти ПЕРЕД SPA fallback) ---
+          # --- API routing (должен быть ПЕРЕД SPA) ---
           RewriteEngine On
           RewriteBase /
           RewriteCond %{REQUEST_URI} ^/api/ [NC]
@@ -46,7 +41,7 @@ jobs:
           RewriteCond %{REQUEST_FILENAME} !-d
           RewriteRule . /index.html [L]
 
-          # --- Отключаем кеш для HTML ---
+          # --- No cache for HTML ---
           <IfModule mod_headers.c>
             <FilesMatch "\.html$">
               Header set Cache-Control "no-cache, no-store, must-revalidate"
@@ -56,21 +51,19 @@ jobs:
           </IfModule>
           EOF
 
-      # 6) Деплой ТОЛЬКО содержимого dist/ в папку сайта.
-      #    Никаких чисток! /api и другие файлы не трогаются.
       - name: Upload via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
-          server: ${{ secrets.FTP_SERVER }}          # твои секреты
+          server:   ${{ secrets.FTP_SERVER }}          # оставь как у тебя в секретах
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           protocol: ftps
-          local-dir: dist/                           # грузим только билд
-          server-dir: /www/psyh.vakulskiy.team/     # корень твоего сайта на REG.RU
-          dangerous-clean-slate: false              # ВАЖНО: ничего не удалять на сервере
-          exclude: |                                 # на всякий случай
+          local-dir: dist/                             # грузим ТОЛЬКО билд
+          server-dir: /www/psyh.vakulskiy.team/       # путь к корню сайта на REG.RU
+          dangerous-clean-slate: false                # ничего не удаляем на сервере
+          exclude: |
             **/.git*
             .github/**
             **/node_modules/**
             **/*.map
-            api/**                                   # api не трогаем
+            api/**                                     # API не трогаем
