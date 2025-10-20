@@ -11,7 +11,7 @@ export default function Landing() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-6xl font-bold text-text-custom mb-6">
-                Найдите своего <span className="text-primary-custom">психолога</span> онлайн
+                Найдите своего <span className="text-primary-custom">психолога</span> онлайн прямо сейчас
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Профессиональная психологическая помощь от квалифицированных специалистов. 
@@ -37,8 +37,8 @@ export default function Landing() {
             </div>
             
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+              <img
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
                 alt="Professional therapy session" 
                 className="rounded-2xl shadow-2xl w-full h-auto"
               />
