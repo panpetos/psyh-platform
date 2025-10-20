@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      # SPA роутинг и сжатие — кладём .htaccess прямо в dist
+      # SPA роутинг и gzip — кладём .htaccess в билд
       - name: Add .htaccess to dist
         run: |
           cat > dist/.htaccess << 'EOF'
@@ -42,5 +42,5 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          local-dir: ./dist
-          server-dir: /www/psyh.vakulskiy.team/
+          local-dir: ./dist/            # ← ТУТ важен завершающий /
+          server-dir: /www/psyh.vakulskiy.team/  # ← и тут слеш есть
