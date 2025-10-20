@@ -67,3 +67,4 @@ jobs:
             **/.github/**
             **/node_modules/**
             **/*.map
+            api/config.php         # <— не заливаем из репо
