@@ -38,8 +38,8 @@ export default function Landing() {
             
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
-                alt="Professional therapy session" 
+                src="https://i.1.creatium.io/disk2/dc/03/df/f1fda60e7a23b81de2e128b79da76bc277/102349.jpg"
+                alt="Professional therapy session"
                 className="rounded-2xl shadow-2xl w-full h-auto"
               />
               <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg">
