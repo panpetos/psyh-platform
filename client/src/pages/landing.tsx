@@ -19,16 +19,16 @@ export default function Landing() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/search">
-                  <Button 
-                    className="bg-primary-custom text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-custom/90 transition text-lg"
+                  <Button
+                    className="w-full sm:w-auto bg-gradient-to-r from-primary-custom to-secondary-custom text-white px-10 py-4 rounded-2xl font-semibold shadow-lg transition text-lg hover:opacity-90"
                     data-testid="button-find-psychologist"
                   >
                     Найти специалиста
                   </Button>
                 </Link>
-                <Button 
+                <Button
                   variant="outline"
-                  className="border-2 border-secondary-custom text-secondary-custom px-8 py-4 rounded-xl font-semibold hover:bg-secondary-custom hover:text-white transition text-lg"
+                  className="w-full sm:w-auto border-0 bg-gradient-to-r from-white via-blue-50 to-white text-secondary-custom px-10 py-4 rounded-2xl font-semibold shadow-lg transition text-lg hover:from-secondary-custom/10 hover:via-secondary-custom/20 hover:to-secondary-custom/10 hover:text-secondary-custom"
                   data-testid="button-become-psychologist"
                 >
                   Стать психологом
@@ -190,8 +190,8 @@ export default function Landing() {
             Присоединитесь к тысячам людей, которые уже получили помощь через нашу платформу
           </p>
           <Link href="/search">
-            <Button 
-              className="bg-white text-primary-custom px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition text-lg"
+            <Button
+              className="w-full sm:w-auto bg-gradient-to-r from-white via-blue-100 to-white text-primary-custom px-10 py-4 rounded-2xl font-semibold shadow-lg transition text-lg hover:from-white hover:via-blue-200 hover:to-white"
               data-testid="button-get-started"
             >
               Начать сейчас
