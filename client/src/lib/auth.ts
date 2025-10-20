@@ -1,89 +1,94 @@
 // client/src/lib/auth.ts
-import { AuthUser } from "@/types";
+import type { AuthUser } from "@/types";
+
+/**
+ * Простенький клиент для /api/auth/*
+ * — всегда шлём credentials: 'include' (чтобы ходили куки сессии)
+ * — после login/register дёргаем fetchMe(), чтобы фронт "узнал" пользователя
+ */
 
 let currentUser: AuthUser | null = null;
-let authListeners: ((user: AuthUser | null) => void)[] = [];
+const listeners: Array<(u: AuthUser | null) => void> = [];
 
-// Универсальный парсер ответа API — поддерживает разные формы:
-// { ok, data: [{...}] } ИЛИ { ok, data: { user: {...} } } ИЛИ { ok, data: {...} }
-function parseUser(payload: any): AuthUser | null {
-  const d = payload?.data;
+function notify() {
+  for (const l of listeners) l(currentUser);
+}
 
-  // 1) {data: [{...}]}
-  const fromArray = Array.isArray(d) ? d[0] : null;
+async function jsonFetch<T = any>(
+  url: string,
+  init: RequestInit = {}
+): Promise<{ ok: boolean; status: number; data: T | any; error?: string }> {
+  const res = await fetch(url, {
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(init.headers || {}),
+    },
+    ...init,
+  });
 
-  // 2) {data: {user: {...}}}
-  const fromUser = d?.user ?? null;
+  const data = await res
+    .json()
+    .catch(() => ({} as any)); // на случай пустых ответов
 
-  // 3) {data: {...}}
-  const fromObject = d && !Array.isArray(d) && !d.user ? d : null;
-
-  const raw = fromArray ?? fromUser ?? fromObject ?? null;
-  if (!raw) return null;
-
-  return {
-    id: Number(raw.id),
-    email: String(raw.email ?? ""),
-    name: String(raw.name ?? ""),
-    role: (raw.role ?? "user") as AuthUser["role"],
-  };
+  // у наших эндпоинтов ok=true/false внутри JSON
+  const ok = res.ok && (data?.ok ?? true) !== false;
+  return { ok, status: res.status, data, error: data?.error };
 }
 
 export const authService = {
-  getCurrentUser(): AuthUser | null {
+  getCurrentUser() {
     return currentUser;
   },
 
-  setCurrentUser(user: AuthUser | null) {
-    currentUser = user;
-    authListeners.forEach((listener) => listener(user));
-  },
-
-  onAuthChange(listener: (user: AuthUser | null) => void) {
-    authListeners.push(listener);
+  onAuthChange(fn: (u: AuthUser | null) => void) {
+    listeners.push(fn);
     return () => {
-      authListeners = authListeners.filter((l) => l !== listener);
+      const i = listeners.indexOf(fn);
+      if (i !== -1) listeners.splice(i, 1);
     };
   },
 
-  // Автовход по сессии
-  async me(): Promise<AuthUser | null> {
-    const r = await fetch("/api/auth/me", { credentials: "include" });
-    const json = await r.json();
-    const user = parseUser(json);
-    this.setCurrentUser(user);
-    return user;
+  async fetchMe() {
+    const { ok, data } = await jsonFetch("/api/auth/me");
+    if (ok && data?.data?.user) {
+      currentUser = data.data.user as AuthUser;
+    } else {
+      currentUser = null;
+    }
+    notify();
+    return currentUser;
   },
 
-  // Логин
-  async login(email: string, password: string): Promise<AuthUser> {
-    const r = await fetch("/api/auth/login", {
+  async login(payload: { email: string; password: string }) {
+    const { ok, error } = await jsonFetch("/api/auth/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(payload),
     });
-
-    const json = await r.json();
-    if (!r.ok || json?.ok === false) {
-      throw new Error(json?.error || "Ошибка входа");
-    }
-
-    const user = parseUser(json);
-    if (!user) {
-      throw new Error("Неверный ответ сервера (user)");
-    }
-
-    this.setCurrentUser(user);
-    return user;
+    if (!ok) return { ok: false, error: error || "Не удалось войти" };
+    await this.fetchMe();
+    return { ok: true as const };
   },
 
-  // Выход
-  async logout(): Promise<void> {
-    await fetch("/api/auth/logout", {
+  async register(payload: {
+    email: string;
+    password: string;
+    firstName?: string;
+    lastName?: string;
+    role?: "client" | "psychologist";
+  }) {
+    const { ok, error } = await jsonFetch("/api/auth/register", {
       method: "POST",
-      credentials: "include",
+      body: JSON.stringify(payload),
     });
-    this.setCurrentUser(null);
+    if (!ok) return { ok: false, error: error || "Не удалось зарегистрироваться" };
+    await this.fetchMe();
+    return { ok: true as const };
+  },
+
+  async logout() {
+    await jsonFetch("/api/auth/logout", { method: "POST" });
+    currentUser = null;
+    notify();
   },
 };
