@@ -11,7 +11,7 @@ export default function Landing() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-6xl font-bold text-text-custom mb-6">
-                Найдите своего <span className="text-primary-custom">психолога</span> онлайн
+                Найдите своего <span className="text-primary-custom">психолога</span> онлайн прямо сейчас
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Профессиональная психологическая помощь от квалифицированных специалистов. 
