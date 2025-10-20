@@ -1,4 +1,4 @@
-name: 🚀 Deploy Vite front to REG.RU
+name: "🚀 Deploy Vite front to REG.RU"
 
 on:
   push:
@@ -9,39 +9,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Получаем код из репозитория
+      # 1) Код
       - uses: actions/checkout@v4
 
-      # 2. Устанавливаем Node.js
+      # 2) Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      # 3. Устанавливаем зависимости
+      # 3) Зависимости
       - name: Install dependencies
         run: npm ci || npm i
 
-      # 4. Собираем проект
+      # 4) Сборка
       - name: Build project
         run: npm run build
 
-      # 5. Добавляем .htaccess в dist (для SPA и отключения кэша)
+      # 5) Кладём корректный .htaccess прямо в dist/
       - name: Add .htaccess to dist
         run: |
           cat > dist/.htaccess << 'EOF'
+          # --- Gzip ---
           <IfModule mod_deflate.c>
             AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
           </IfModule>
 
-          # SPA fallback
+          # --- API роутинг (должен идти ПЕРЕД SPA fallback) ---
           RewriteEngine On
           RewriteBase /
+          RewriteCond %{REQUEST_URI} ^/api/ [NC]
+          RewriteRule ^api/(.*)$ api/index.php [L,QSA]
+
+          # --- SPA fallback ---
           RewriteCond %{REQUEST_FILENAME} !-f
           RewriteCond %{REQUEST_FILENAME} !-d
           RewriteRule . /index.html [L]
 
-          # Disable cache for html
+          # --- Отключаем кеш для HTML ---
           <IfModule mod_headers.c>
             <FilesMatch "\.html$">
               Header set Cache-Control "no-cache, no-store, must-revalidate"
@@ -51,20 +56,21 @@ jobs:
           </IfModule>
           EOF
 
-      # 6. Заливаем на хостинг REG.RU через FTP
+      # 6) Деплой ТОЛЬКО содержимого dist/ в папку сайта.
+      #    Никаких чисток! /api и другие файлы не трогаются.
       - name: Upload via FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ secrets.FTP_SERVER }}          # твои секреты
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          local-dir: ./dist/               # Папка с собранным проектом
-          server-dir: ./                   # Корень FTP-директории (не /www/www)
-          dangerous-clean-slate: true      # Очистка перед загрузкой
-          log-level: verbose               # Подробный лог
-          exclude: |
+          protocol: ftps
+          local-dir: dist/                           # грузим только билд
+          server-dir: /www/psyh.vakulskiy.team/     # корень твоего сайта на REG.RU
+          dangerous-clean-slate: false              # ВАЖНО: ничего не удалять на сервере
+          exclude: |                                 # на всякий случай
             **/.git*
-            **/.github/**
+            .github/**
             **/node_modules/**
             **/*.map
-            api/config.php         # <— не заливаем из репо
+            api/**                                   # api не трогаем
