@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { authService } from "@/lib/auth";
 import { Eye, EyeOff } from "lucide-react";
+import { useLocation } from "wouter";   // 👈 добавлено
 
 interface LoginModalProps {
   open: boolean;
@@ -19,20 +20,35 @@ export default function LoginModal({ open, onClose, onShowRegister }: LoginModal
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const [, setLocation] = useLocation(); // 👈 для программной навигации
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      await authService.login(email, password);
+      // authService.login должен делать fetch('/api/auth/login', { credentials: 'include', ... })
+      const user = await authService.login(email, password);
+
       toast({
         title: "Успешный вход",
         description: "Добро пожаловать в PsychPlatform!",
       });
+
+      // 🔁 закроем модалку и почистим поля
       onClose();
       setEmail("");
       setPassword("");
+
+      // 🚀 Переход в нужный раздел (поставь свой маршрут)
+      // пример: админов ведём в /admin, остальных — в /account
+      const target = user?.role === "admin" ? "/admin" : "/account";
+      setLocation(target);
+
+      // На случай, если состояние приложения инициализируется из /api/auth/me только при загрузке —
+      // принудительно перерисуем страницу (можно удалить, если не нужно):
+      // window.location.href = target;
+
     } catch (error) {
       toast({
         title: "Ошибка входа",
@@ -87,11 +103,7 @@ export default function LoginModal({ open, onClose, onShowRegister }: LoginModal
                 onClick={() => setShowPassword(!showPassword)}
                 data-testid="toggle-password"
               >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </Button>
             </div>
           </div>
@@ -107,9 +119,7 @@ export default function LoginModal({ open, onClose, onShowRegister }: LoginModal
         </form>
 
         <div className="text-center pt-4 border-t border-gray-200">
-          <p className="text-sm text-gray-600 mb-4">
-            Еще нет аккаунта?
-          </p>
+          <p className="text-sm text-gray-600 mb-4">Еще нет аккаунта?</p>
           <Button
             variant="ghost"
             onClick={onShowRegister}
@@ -120,7 +130,6 @@ export default function LoginModal({ open, onClose, onShowRegister }: LoginModal
           </Button>
         </div>
 
-        {/* Demo credentials */}
         <div className="bg-muted-custom p-4 rounded-lg text-sm">
           <p className="font-medium mb-2">Демо-аккаунты:</p>
           <p>Клиент: maria.ivanova@example.com / client123</p>
